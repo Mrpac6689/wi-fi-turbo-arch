@@ -1,36 +1,66 @@
-# WiFi Turbo Boost para Arch Linux
-## por MrPaC6689
+# WiFi Turbo Boost for Arch Linux
+by MrPaC6689
 
-Este script (`wifi-turbo.sh`) otimiza conexões Wi-Fi no Arch Linux, especialmente para placas **Intel 8265 / 8275** ou similares com suporte a 5GHz, corrigindo problemas comuns como baixa velocidade, domínio regulatório incorreto, modo de economia de energia e falta de firmware.
+This script (`wifi-turbo.sh`) optimizes Wi-Fi connections on Arch Linux, especially for Intel 8265 / 8275 chipsets (or similar dual-band 5GHz cards).  
+It fixes common issues such as low speed, incorrect regulatory domain, power-saving mode bottlenecks, and missing firmware.
 
-## 🔧 O que o script faz
+## 🔧 What the script does
 
-1. Instala dependências essenciais:
-   - `iw`
-   - `wireless-regdb`
-   - `speedtest-cli`
+- Installs essential dependencies:
+  - `iw`
+  - `wireless-regdb`
+  - `speedtest-cli`
 
-2. Corrige o domínio regulatório (`regdom`) com aplicação persistente de `BR`:
-   - Cria entrada no `tmpfiles.d` que executa `iw reg set BR` no boot.
-   - Cria script `/etc/iw.regset` para uso pelo `tmpfiles`.
+- Fixes the regulatory domain (`regdom`) by persistently applying `BR`:
+  - Creates a `tmpfiles.d` entry to run `iw reg set BR` at boot.
+  - Creates the `/etc/iw.regset` helper script used by that rule.
 
-3. Corrige configuração do `mkinitcpio.conf`:
-   - Adiciona `iwlwifi` e `cfg80211` em `MODULES`.
-   - Adiciona `regulatory.db` no `FILES`.
+- Edits `mkinitcpio.conf` to:
+  - Add `iwlwifi` and `cfg80211` to `MODULES`.
+  - Include `regulatory.db` in `FILES`.
 
-4. Recria `initramfs` para aplicar as mudanças no boot.
+- Rebuilds `initramfs` to apply changes from boot.
 
-5. Desativa o modo de economia de energia da placa Wi-Fi via NetworkManager:
-   - Define `wifi.powersave = 2`.
+- Disables Wi-Fi power-saving via NetworkManager:
+  - Sets `wifi.powersave = 2`.
 
-6. Reinicia o `NetworkManager` e aplica `iw reg set BR`.
+- Restarts NetworkManager and applies `iw reg set BR` manually.
 
-7. Testa e informa a velocidade de conexão.
+- Runs a real-world connection speed test using `speedtest.net`.
 
-## 📥 Instalação
+## 📥 Installation
 
 ```bash
-git clone https://github.com/seuusuario/wifi-turbo-arch.git
+git clone https://github.com/yourusername/wifi-turbo-arch.git
 cd wifi-turbo-arch
 chmod +x wifi-turbo.sh
 ./wifi-turbo.sh
+```
+
+> 💡 Run as root or with `sudo`.
+
+## 🔁 Post-install reboot recommended
+
+Reboot your system to ensure:
+
+- Updated initramfs is loaded
+- The `BR` regdom is applied early in the boot
+- Power saving remains disabled
+
+## 🧪 Test your connection
+
+```bash
+speedtest
+```
+
+Or open [https://fast.com](https://fast.com) in your browser.
+
+## ✅ Requirements
+
+- Arch Linux (or derivative)
+- Compatible Wi-Fi chipset (preferably Intel AC)
+- Kernel with `iwlwifi` module support
+
+## 📄 License
+
+MIT — use freely and feel free to contribute improvements.
