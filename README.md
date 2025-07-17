@@ -25,6 +25,8 @@ Este script (`wifi-turbo.sh`) otimiza conexões Wi-Fi no Arch Linux, especialmen
 
 6. Reinicia o `NetworkManager` e aplica `iw reg set BR`.
 
+7. Testa e informa a velocidade de conexão.
+
 ## 📥 Instalação
 
 ```bash
